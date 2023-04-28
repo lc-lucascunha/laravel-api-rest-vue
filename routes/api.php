@@ -5,15 +5,21 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| API CATEGORIAS
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'categorias', 'as' => 'categories.'], function () {
+    Route::get(''       , ['as' => 'index'  , 'uses' => 'CategoryController@index']);
+    Route::get('{id}'   , ['as' => 'show'   , 'uses' => 'CategoryController@show']);
+    Route::post(''      , ['as' => 'store'  , 'uses' => 'CategoryController@store']);
+    Route::put('{id}'   , ['as' => 'update' , 'uses' => 'CategoryController@update']);
+    Route::delete('{id}', ['as' => 'destroy', 'uses' => 'CategoryController@destroy']);
 });
+
+/*
+|--------------------------------------------------------------------------
+| API PRODUTOS
+|--------------------------------------------------------------------------
+*/
+
