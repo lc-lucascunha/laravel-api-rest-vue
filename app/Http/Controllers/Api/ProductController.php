@@ -21,73 +21,108 @@ class ProductController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Listar produtos
      */
     public function index()
     {
-        $products = $this->product->with('category')->get();
+        try {
 
-        return response()->json($products);
+            $products = $this->product->with('category')->get();
+
+            return response()->json($products);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao processar requisição'], 500);
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Exibir um produto específico
      */
     public function show($id)
     {
-        $product = $this->product->with('category')->find($id);
+        try {
 
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
+            $product = $this->product->with('category')->find($id);
+
+            if (!$product) {
+                return response()->json(['message' => 'Produto não encontrado'], 404);
+            }
+
+            return response()->json($product);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao processar requisição'], 422);
         }
-
-        return response()->json($product);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Cadastrar produto
      */
     public function store(Request $request)
     {
-        $product = $this->product->create([
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-        ]);
+        try {
 
-        return response()->json($product, 201);
+            $data = $this->validate($request, [
+                'category_id' => 'required|integer',
+                'name' => 'required|string|max:255',
+            ]);
+
+            $product = $this->product->create($data);
+
+            return response()->json($product, 201);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao processar requisição'], 422);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Atualizar um produto específico
      */
     public function update(Request $request, $id)
     {
-        $product = $this->product->find($id);
+        try {
 
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
+            $product = $this->product->find($id);
+
+            if (!$product) {
+                return response()->json(['message' => 'Produto não encontrado'], 404);
+            }
+
+            $data = $this->validate($request, [
+                'category_id' => 'required|integer',
+                'name' => 'required|string|max:255',
+            ]);
+
+            $product->update($data);
+
+            return response()->json($product);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao processar requisição'], 422);
         }
-
-        $product->category_id = $request->category_id;
-        $product->name = $request->name;
-        $product->save();
-
-        return response()->json($product);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remover um produto específico
      */
     public function destroy($id)
     {
-        $product = $this->product->find($id);
+        try {
 
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
+            $product = $this->product->find($id);
+
+            if (!$product) {
+                return response()->json(['message' => 'Produto não encontrado'], 404);
+            }
+
+            $product->delete();
+
+            return response()->json(['message' => 'Produto removido com sucesso']);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao processar requisição'], 422);
         }
-
-        $product->delete();
-
-        return response()->json(['message' => 'Product deleted']);
     }
 }

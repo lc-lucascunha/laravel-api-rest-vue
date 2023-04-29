@@ -7,30 +7,30 @@ Route::group(['namespace' => 'Api'], function () {
 
     /*
     |--------------------------------------------------------------------------
-    | API CATEGORIAS
+    | CATEGORIAS
     |--------------------------------------------------------------------------
     */
 
-    Route::group(['prefix' => 'categories', 'as' => 'categories.'], function () {
-        Route::get(''       , ['as' => 'index'  , 'uses' => 'CategoryController@index']);
-        Route::get('{id}'   , ['as' => 'show'   , 'uses' => 'CategoryController@show']);
-        Route::post(''      , ['as' => 'store'  , 'uses' => 'CategoryController@store']);
-        Route::put('{id}'   , ['as' => 'update' , 'uses' => 'CategoryController@update']);
-        Route::delete('{id}', ['as' => 'destroy', 'uses' => 'CategoryController@destroy']);
+    Route::group(['prefix' => 'categories'], function () {
+        Route::get(''       , 'CategoryController@index');
+        Route::get('{id}'   , 'CategoryController@show');
+        Route::post(''      , 'CategoryController@store');
+        Route::put('{id}'   , 'CategoryController@update');
+        Route::delete('{id}', 'CategoryController@destroy');
     });
 
     /*
     |--------------------------------------------------------------------------
-    | API PRODUTOS
+    | PRODUTOS
     |--------------------------------------------------------------------------
     */
 
-    Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
-        Route::get(''       , ['as' => 'index'  , 'uses' => 'ProductController@index']);
-        Route::get('{id}'   , ['as' => 'show'   , 'uses' => 'ProductController@show']);
-        Route::post(''      , ['as' => 'store'  , 'uses' => 'ProductController@store']);
-        Route::put('{id}'   , ['as' => 'update' , 'uses' => 'ProductController@update']);
-        Route::delete('{id}', ['as' => 'destroy', 'uses' => 'ProductController@destroy']);
+    Route::group(['prefix' => 'products'], function () {
+        Route::get(''       , 'ProductController@index');
+        Route::get('{id}'   , 'ProductController@show');
+        Route::post(''      , 'ProductController@store');
+        Route::put('{id}'   , 'ProductController@update');
+        Route::delete('{id}', 'ProductController@destroy');
     });
 
 });

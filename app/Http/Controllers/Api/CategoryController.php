@@ -21,75 +21,110 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Listar categorias
      */
     public function index()
     {
-        $categories = $this->category->all();
+        try {
 
-        return response()->json($categories);
+            $categories = $this->category->withCount('products')->get();
+
+            return response()->json($categories);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao processar requisição'], 500);
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Exibir uma categoria específica
      */
     public function show($id)
     {
-        $category = $this->category->find($id);
+        try {
 
-        if (!$category) {
-            return response()->json(['message' => 'Category not found'], 404);
+            $category = $this->category->withCount('products')->find($id);
+
+            if (!$category) {
+                return response()->json(['message' => 'Categoria não encontrada'], 404);
+            }
+
+            return response()->json($category);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao processar requisição'], 422);
         }
-
-        return response()->json($category);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Cadastrar categoria
      */
     public function store(Request $request)
     {
-        $category = $this->category->create([
-            'name' => $request->name,
-        ]);
+        try {
 
-        return response()->json($category, 201);
+            $data = $this->validate($request, [
+                'name' => 'required|string|max:255|unique:categories,name',
+            ]);
+
+            $category = $this->category->create($data);
+
+            return response()->json($category, 201);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao processar requisição'], 422);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Atualizar uma categoria específica
      */
     public function update(Request $request, $id)
     {
-        $category = $this->category->find($id);
+        try {
 
-        if (!$category) {
-            return response()->json(['message' => 'Category not found'], 404);
+            $category = $this->category->find($id);
+
+            if (!$category) {
+                return response()->json(['message' => 'Categoria não encontrada'], 404);
+            }
+
+            $data = $this->validate($request, [
+                'name' => 'required|string|max:255|unique:categories,name,'.$category->id,
+            ]);
+
+            $category->update($data);
+
+            return response()->json($category);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao processar requisição'], 422);
         }
-
-        $category->name = $request->name;
-        $category->save();
-
-        return response()->json($category);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remover uma categoria específica
      */
     public function destroy($id)
     {
-        $category = $this->category->find($id);
+        try {
 
-        if (!$category) {
-            return response()->json(['message' => 'Category not found'], 404);
+            $category = $this->category->find($id);
+
+            if (!$category) {
+                return response()->json(['message' => 'Categoria não encontrada'], 404);
+            }
+
+            // Exclui todos os produtos relacionados com a categoria
+            $category->products()->delete();
+
+            // Exclui a categoria
+            $category->delete();
+
+            return response()->json(['message' => 'Categoria removida com sucesso']);
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao processar requisição'], 422);
         }
-
-        // Exclui todos os produtos relacionados com a categoria
-        $category->products()->delete();
-
-        // Exclui a categoria
-        $category->delete();
-
-        return response()->json(['message' => 'Category deleted']);
     }
 }
