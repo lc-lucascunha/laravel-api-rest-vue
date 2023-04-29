@@ -69,7 +69,7 @@ Compilando o Vue.js
 npm run dev
 ```
 
-Iniciando a API de Categorias e Produtos
+Iniciando a aplicação (API + VUE)
 ```
 php artisan serve
 ```
