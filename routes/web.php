@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('categories');
+    return redirect('/categories');
 });
 
 Route::get('/categories', function () {

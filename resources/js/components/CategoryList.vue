@@ -5,7 +5,7 @@
                 <h1>Categories</h1>
             </div>
             <div class="col-md-6 text-end">
-                <button type="button" class="btn btn-primary" @click="createCategory">Add Category</button>
+                <button type="button" class="btn btn-success" @click="createCategory">Add Category</button>
             </div>
         </div>
 
@@ -14,9 +14,9 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Products Count</th>
-                <th>Created</th>
-                <th>Updated</th>
+                <th class="text-center">Products Count</th>
+                <th class="text-center">Created</th>
+                <th class="text-center">Updated</th>
                 <th></th>
             </tr>
             </thead>
@@ -24,10 +24,10 @@
             <tr v-for="category in categories" :key="category.id">
                 <td>{{ category.id }}</td>
                 <td>{{ category.name }}</td>
-                <td>{{ category.products_count }}</td>
-                <td>{{ category.created_at }}</td>
-                <td>{{ category.updated_at }}</td>
-                <td>
+                <td class="text-center">{{ category.products_count }}</td>
+                <td class="text-center">{{ category.created_at }}</td>
+                <td class="text-center">{{ category.updated_at }}</td>
+                <td class="text-end">
                     <button type="button" class="btn btn-primary btn-sm me-2" @click="editCategory(category)">Edit</button>
                     <button type="button" class="btn btn-danger btn-sm" @click="deleteCategory(category)">Delete</button>
                 </td>

@@ -12,10 +12,16 @@
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+
+    <style>
+        button{
+            color: white !important;
+        }
+    </style>
 </head>
 <body>
 
-    <div id="app">
+    <div id="app" class="container">
         <div>
             <ul>
                 <li><a href="/categories">Categories</a></li>

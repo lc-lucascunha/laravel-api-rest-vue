@@ -5,7 +5,7 @@
                 <h1>Products</h1>
             </div>
             <div class="col-md-6 text-end">
-                <button type="button" class="btn btn-primary" @click="createProduct">Add Product</button>
+                <button type="button" class="btn btn-success" @click="createProduct">Add Product</button>
             </div>
         </div>
 
@@ -15,8 +15,8 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Category</th>
-                <th>Created</th>
-                <th>Updated</th>
+                <th class="text-center">Created</th>
+                <th class="text-center">Updated</th>
                 <th></th>
             </tr>
             </thead>
@@ -25,9 +25,9 @@
                 <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.category.name }}</td>
-                <td>{{ product.created_at }}</td>
-                <td>{{ product.updated_at }}</td>
-                <td>
+                <td class="text-center">{{ product.created_at }}</td>
+                <td class="text-center">{{ product.updated_at }}</td>
+                <td class="text-end">
                     <button type="button" class="btn btn-primary btn-sm me-2" @click="editProduct(product)">Edit</button>
                     <button type="button" class="btn btn-danger btn-sm" @click="deleteProduct(product)">Delete</button>
                 </td>
