@@ -49,6 +49,7 @@
                                 <input type="text" class="form-control" id="name" v-model="product.name" required>
                                 <div class="invalid-feedback">Please enter a product name.</div>
                             </div>
+                            <br>
                             <div class="form-group">
                                 <label for="category">Category</label>
                                 <select class="form-control" id="category" v-model="product.category_id" required>
@@ -59,7 +60,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-primary">{{ formAction }}</button>
                         </div>
                     </form>
@@ -70,6 +71,8 @@
 </template>
 
 <script>
+import bus from '../eventBus';
+
 export default {
     data() {
         return {
@@ -89,8 +92,25 @@ export default {
     created() {
         this.fetchProducts();
         this.fetchCategories();
+
+        bus.$on('category-created', () => {
+            this.fetchCategories();
+        });
+
+        bus.$on('category-updated', () => {
+            this.fetchCategories();
+            this.fetchProducts();
+        });
+
+        bus.$on('category-deleted', () => {
+            this.fetchCategories();
+            this.fetchProducts();
+        });
     },
     methods: {
+        emitProducts(event){
+            bus.$emit('product-'+event);
+        },
         fetchProducts() {
             axios.get('/api/products')
                 .then(response => {
@@ -135,7 +155,7 @@ export default {
                     .then(response => {
                         $('#productModal').modal('hide');
                         this.fetchProducts();
-                        this.fetchCategories();
+                        this.emitProducts('created');
                     })
                     .catch(error => {
                         console.log(error);
@@ -145,7 +165,7 @@ export default {
                     .then(response => {
                         $('#productModal').modal('hide');
                         this.fetchProducts();
-                        this.fetchCategories();
+                        this.emitProducts('updated');
                     })
                     .catch(error => {
                         console.log(error);
@@ -157,7 +177,7 @@ export default {
                 axios.delete('/api/products/' + product.id)
                     .then(response => {
                         this.fetchProducts();
-                        this.fetchCategories();
+                        this.emitProducts('deleted');
                     })
                     .catch(error => {
                         console.log(error);

@@ -24,7 +24,10 @@
             <tr v-for="category in categories" :key="category.id">
                 <td>{{ category.id }}</td>
                 <td>{{ category.name }}</td>
-                <td class="text-center">{{ category.products_count }}</td>
+                <td class="text-center">
+                    <label class="count rounded-circle" v-if="category.products_count > 0">{{category.products_count}}</label>
+                    <label class="count-null rounded-circle" v-else>{{category.products_count}}</label>
+                </td>
                 <td class="text-center">{{ category.created_at }}</td>
                 <td class="text-center">{{ category.updated_at }}</td>
                 <td class="text-end">
@@ -62,6 +65,8 @@
 </template>
 
 <script>
+import bus from '../eventBus';
+
 export default {
     data() {
         return {
@@ -78,8 +83,23 @@ export default {
     },
     created() {
         this.fetchCategories();
+
+        bus.$on('product-created', () => {
+            this.fetchCategories();
+        });
+
+        bus.$on('product-updated', () => {
+            this.fetchCategories();
+        });
+
+        bus.$on('product-deleted', () => {
+            this.fetchCategories();
+        });
     },
     methods: {
+        emitCategories(event){
+            bus.$emit('category-'+event);
+        },
         fetchCategories() {
             axios.get('/api/categories')
                 .then(response => {
@@ -113,6 +133,7 @@ export default {
                     .then(response => {
                         $('#categoryModal').modal('hide');
                         this.fetchCategories();
+                        this.emitCategories('created');
                     })
                     .catch(error => {
                         console.log(error);
@@ -122,6 +143,7 @@ export default {
                     .then(response => {
                         $('#categoryModal').modal('hide');
                         this.fetchCategories();
+                        this.emitCategories('updated');
                     })
                     .catch(error => {
                         console.log(error);
@@ -133,6 +155,7 @@ export default {
                 axios.delete('/api/categories/' + category.id)
                     .then(response => {
                         this.fetchCategories();
+                        this.emitCategories('deleted');
                     })
                     .catch(error => {
                         console.log(error);

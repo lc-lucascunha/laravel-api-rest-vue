@@ -1908,6 +1908,8 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../eventBus */ "./resources/js/eventBus.js");
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1923,13 +1925,26 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    var _this = this;
     this.fetchCategories();
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('product-created', function () {
+      _this.fetchCategories();
+    });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('product-updated', function () {
+      _this.fetchCategories();
+    });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('product-deleted', function () {
+      _this.fetchCategories();
+    });
   },
   methods: {
+    emitCategories: function emitCategories(event) {
+      _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('category-' + event);
+    },
     fetchCategories: function fetchCategories() {
-      var _this = this;
+      var _this2 = this;
       axios.get('/api/categories').then(function (response) {
-        _this.categories = response.data;
+        _this2.categories = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -1953,28 +1968,31 @@ __webpack_require__.r(__webpack_exports__);
       $('#categoryModal').modal('show');
     },
     submitCategory: function submitCategory() {
-      var _this2 = this;
+      var _this3 = this;
       if (this.formAction === 'Create') {
         axios.post('/api/categories', this.category).then(function (response) {
           $('#categoryModal').modal('hide');
-          _this2.fetchCategories();
+          _this3.fetchCategories();
+          _this3.emitCategories('created');
         })["catch"](function (error) {
           console.log(error);
         });
       } else if (this.formAction === 'Update') {
         axios.put('/api/categories/' + this.category.id, this.category).then(function (response) {
           $('#categoryModal').modal('hide');
-          _this2.fetchCategories();
+          _this3.fetchCategories();
+          _this3.emitCategories('updated');
         })["catch"](function (error) {
           console.log(error);
         });
       }
     },
     deleteCategory: function deleteCategory(category) {
-      var _this3 = this;
+      var _this4 = this;
       if (confirm('Are you sure you want to delete this category?')) {
         axios["delete"]('/api/categories/' + category.id).then(function (response) {
-          _this3.fetchCategories();
+          _this4.fetchCategories();
+          _this4.emitCategories('deleted');
         })["catch"](function (error) {
           console.log(error);
         });
@@ -1994,6 +2012,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../eventBus */ "./resources/js/eventBus.js");
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2011,22 +2031,37 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    var _this = this;
     this.fetchProducts();
     this.fetchCategories();
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('category-created', function () {
+      _this.fetchCategories();
+    });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('category-updated', function () {
+      _this.fetchCategories();
+      _this.fetchProducts();
+    });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('category-deleted', function () {
+      _this.fetchCategories();
+      _this.fetchProducts();
+    });
   },
   methods: {
+    emitProducts: function emitProducts(event) {
+      _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('product-' + event);
+    },
     fetchProducts: function fetchProducts() {
-      var _this = this;
+      var _this2 = this;
       axios.get('/api/products').then(function (response) {
-        _this.products = response.data;
+        _this2.products = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     fetchCategories: function fetchCategories() {
-      var _this2 = this;
+      var _this3 = this;
       axios.get('/api/categories').then(function (response) {
-        _this2.categories = response.data;
+        _this3.categories = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2052,31 +2087,31 @@ __webpack_require__.r(__webpack_exports__);
       $('#productModal').modal('show');
     },
     submitProduct: function submitProduct() {
-      var _this3 = this;
+      var _this4 = this;
       if (this.formAction === 'Create') {
         axios.post('/api/products', this.product).then(function (response) {
           $('#productModal').modal('hide');
-          _this3.fetchProducts();
-          _this3.fetchCategories();
+          _this4.fetchProducts();
+          _this4.emitProducts('created');
         })["catch"](function (error) {
           console.log(error);
         });
       } else if (this.formAction === 'Update') {
         axios.put('/api/products/' + this.product.id, this.product).then(function (response) {
           $('#productModal').modal('hide');
-          _this3.fetchProducts();
-          _this3.fetchCategories();
+          _this4.fetchProducts();
+          _this4.emitProducts('updated');
         })["catch"](function (error) {
           console.log(error);
         });
       }
     },
     deleteProduct: function deleteProduct(product) {
-      var _this4 = this;
+      var _this5 = this;
       if (confirm('Are you sure you want to delete this product?')) {
         axios["delete"]('/api/products/' + product.id).then(function (response) {
-          _this4.fetchProducts();
-          _this4.fetchCategories();
+          _this5.fetchProducts();
+          _this5.emitProducts('deleted');
         })["catch"](function (error) {
           console.log(error);
         });
@@ -2120,7 +2155,11 @@ var render = function render() {
       key: category.id
     }, [_c("td", [_vm._v(_vm._s(category.id))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(category.name))]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
-    }, [_vm._v(_vm._s(category.products_count))]), _vm._v(" "), _c("td", {
+    }, [category.products_count > 0 ? _c("label", {
+      staticClass: "count rounded-circle"
+    }, [_vm._v(_vm._s(category.products_count))]) : _c("label", {
+      staticClass: "count-null rounded-circle"
+    }, [_vm._v(_vm._s(category.products_count))])]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
     }, [_vm._v(_vm._s(category.created_at))]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
@@ -2372,7 +2411,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("div", {
     staticClass: "invalid-feedback"
-  }, [_vm._v("Please enter a product name.")])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Please enter a product name.")])]), _vm._v(" "), _c("br"), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
@@ -2417,7 +2456,7 @@ var render = function render() {
       type: "button",
       "data-bs-dismiss": "modal"
     }
-  }, [_vm._v("Close")]), _vm._v(" "), _c("button", {
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c("button", {
     staticClass: "btn btn-primary",
     attrs: {
       type: "submit"
@@ -45359,6 +45398,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_ProductList_vue_vue_type_template_id_438ffe92___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/eventBus.js":
+/*!**********************************!*\
+  !*** ./resources/js/eventBus.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+var bus = new vue__WEBPACK_IMPORTED_MODULE_0___default.a();
+/* harmony default export */ __webpack_exports__["default"] = (bus);
 
 /***/ }),
 

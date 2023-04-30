@@ -14,6 +14,24 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
     <style>
+        .row{
+            padding: 2rem;
+        }
+        .count, .count-null{
+            background: #c8e6c9;
+            color: #263238;
+            text-align: center;
+            padding-top: 0.3rem;
+            font-size:  0.7875rem;
+            width: 1.8rem;
+            height: 1.8rem;
+        }
+        .count-null{
+            background: #e0e0e0;
+        }
+        table tbody tr td{
+            font-size:  0.7875rem;
+        }
         button{
             color: white !important;
         }
@@ -21,21 +39,11 @@
 </head>
 <body>
 
-    <div id="app" class="container">
-        <div>
-            <ul>
-                <li><a href="/categories">Categories</a></li>
-                <li><a href="/products">Products</a></li>
-            </ul>
-        </div>
-        <main>
-            @yield('content')
-        </main>
-    </div>
+    <main id="app">
+        @yield('content')
+    </main>
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}"></script>
-
-    @yield('scripts')
 </body>
 </html>

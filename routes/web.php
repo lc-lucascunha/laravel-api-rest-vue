@@ -14,13 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect('/categories');
-});
-
-Route::get('/categories', function () {
-    return view('categories');
-});
-
-Route::get('/products', function () {
-    return view('products');
+    return view('index');
 });
