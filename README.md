@@ -18,9 +18,14 @@ Acesse a pasta do projeto
 cd laravel-api-rest-vue/
 ```
 
-Instale as dependência utilizando o Composer
+Instale as dependência utilizando Composer
 ```
 composer install
+```
+
+Instale as dependência utilizando NPM
+```
+npm install
 ```
 
 Faça uma cópia do arquivo de configuração
@@ -56,16 +61,6 @@ Caso não queira utilizar **migrate**, você pode executar o arquivo (**ddl.sql*
 cat database/mysql/ddl.sql
 ```
 Não se esqueça de definir as permissões (caso necessário) nas pasta /bootstrap, /storage, /database.
-
-Instale as dependência pelo gerenciador de pacotes do node
-```
-npm install
-```
-
-Compile o Vue.js
-```
-npm run dev
-```
 
 ## Iniciando a aplicação
 
