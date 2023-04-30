@@ -22,17 +22,17 @@ class Category extends Model
 
     public function getCreatedAtAttribute($value)
     {
-        $value = explode('T', $value);
-        $date = implode('/', array_reverse(explode('-', $value[0])));
-        $time = substr($value[1], 0, 8);
+        $value = strtotime($value);
+        $date = date("d/m/Y", $value);
+        $time = date("H:i:s", $value);
         return "{$date} {$time}";
     }
 
     public function getUpdatedAtAttribute($value)
     {
-        $value = explode('T', $value);
-        $date = implode('/', array_reverse(explode('-', $value[0])));
-        $time = substr($value[1], 0, 8);
+        $value = strtotime($value);
+        $date = date("d/m/Y", $value);
+        $time = date("H:i:s", $value);
         return "{$date} {$time}";
     }
 }
