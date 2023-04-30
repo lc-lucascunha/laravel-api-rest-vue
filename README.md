@@ -23,11 +23,6 @@ Instale as dependência utilizando Composer
 composer install
 ```
 
-Instale as dependência utilizando NPM
-```
-npm install
-```
-
 Faça uma cópia do arquivo de configuração
 ```
 cp .env.example .env
