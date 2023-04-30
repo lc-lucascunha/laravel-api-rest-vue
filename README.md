@@ -1,3 +1,5 @@
+![Alt text](https://raw.githubusercontent.com/lc-lucascunha/laravel-api-rest-vue/master/public/images/git.png)
+
 ## Versões utilizadas
 
 - **PHP** (7.2.34)
