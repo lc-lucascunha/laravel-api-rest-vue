@@ -62,9 +62,8 @@ cat database/mysql/ddl.sql
 ```
 Não se esqueça de definir as permissões (caso necessário) nas pasta /bootstrap, /storage, /database.
 
-## Iniciando a aplicação
+## Iniciando a aplicação (API + VUE)
 
-Iniciando a aplicação (API + VUE)
 ```
 php artisan serve
 ```
