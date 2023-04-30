@@ -18,7 +18,7 @@ Acesse a pasta do projeto
 cd laravel-api-rest-vue/
 ```
 
-Instale as dependência utilizando **composer**
+Instale as dependência
 ```
 composer install
 ```
