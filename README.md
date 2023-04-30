@@ -57,17 +57,17 @@ cat database/mysql/ddl.sql
 ```
 Não se esqueça de definir as permissões (caso necessário) nas pasta /bootstrap, /storage, /database.
 
-Instale as dependência utilizando o Node
+Instale as dependência pelo gerenciador de pacotes do node
 ```
 npm install
 ```
 
-## Iniciando a aplicação
-
-Compilando o Vue.js
+Compile o Vue.js
 ```
 npm run dev
 ```
+
+## Iniciando a aplicação
 
 Iniciando a aplicação (API + VUE)
 ```
