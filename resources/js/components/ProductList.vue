@@ -1,11 +1,17 @@
 <template>
     <div>
-        <div class="row mb-4">
-            <div class="col-md-6">
+        <div class="row">
+            <div class="col-sm-6">
                 <h1>Products</h1>
             </div>
-            <div class="col-md-6 text-end">
+            <div class="col-sm-6 text-end">
                 <button type="button" class="btn btn-success" @click="createProduct">Add Product</button>
+            </div>
+        </div>
+
+        <div class="row pt-0">
+            <div class="col-sm-12">
+                <input type="text" class="form-control" placeholder="Search by Name..." v-model="searchText">
             </div>
         </div>
 
@@ -72,6 +78,7 @@
 
 <script>
 import bus from '../eventBus';
+import _ from 'lodash';
 
 export default {
     data() {
@@ -87,6 +94,7 @@ export default {
             },
             formAction: 'Create',
             formTitle: 'Add Product',
+            searchText: ''
         };
     },
     created() {
@@ -107,12 +115,23 @@ export default {
             this.fetchProducts();
         });
     },
+    watch: {
+        searchText: _.debounce(function() {
+            this.fetchProducts();
+        }, 500)
+    },
     methods: {
         emitProducts(event){
             bus.$emit('product-'+event);
         },
         fetchProducts() {
-            axios.get('/api/products')
+            let url = '/api/products';
+
+            if (this.searchText) {
+                url += '?q=' + encodeURIComponent(this.searchText.trim());
+            }
+
+            axios.get(url)
                 .then(response => {
                     this.products = response.data;
                 })
@@ -154,6 +173,7 @@ export default {
                 axios.post('/api/products', this.product)
                     .then(response => {
                         $('#productModal').modal('hide');
+                        this.searchText = '';
                         this.fetchProducts();
                         this.emitProducts('created');
                     })

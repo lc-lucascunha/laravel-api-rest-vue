@@ -10,6 +10,11 @@ class Category extends Model
         'name',
     ];
 
+    public function scopeSearch($query, $q)
+    {
+        return $query->where('name', 'like', "%{$q}%");
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class);

@@ -23,11 +23,11 @@ class CategoryController extends Controller
     /**
      * Listar categorias
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
 
-            $categories = $this->category->withCount('products')->get();
+            $categories = $this->category->search($request->q)->withCount('products')->get();
 
             return response()->json($categories);
 

@@ -23,11 +23,11 @@ class ProductController extends Controller
     /**
      * Listar produtos
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
 
-            $products = $this->product->with('category')->get();
+            $products = $this->product->search($request->q)->with('category')->get();
 
             return response()->json($products);
 

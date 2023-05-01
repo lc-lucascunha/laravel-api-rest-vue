@@ -16,6 +16,7 @@
     <style>
         .row{
             padding: 2rem;
+            margin: 0;
         }
         .count, .count-null{
             background: #c8e6c9;
@@ -29,8 +30,17 @@
         .count-null{
             background: #e0e0e0;
         }
+        .pt-0{
+            padding-top: 0;
+        }
         table tbody tr td{
             font-size:  0.7875rem;
+        }
+        table tbody tr:last-child {
+            border-bottom: 0 solid white;
+        }
+        table{
+            margin-bottom: unset !important;
         }
         button{
             color: white !important;

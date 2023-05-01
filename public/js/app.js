@@ -1909,6 +1909,9 @@ module.exports = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../eventBus */ "./resources/js/eventBus.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -1921,7 +1924,8 @@ __webpack_require__.r(__webpack_exports__);
         updated_at: ''
       },
       formAction: 'Create',
-      formTitle: 'Add Category'
+      formTitle: 'Add Category',
+      searchText: ''
     };
   },
   created: function created() {
@@ -1937,13 +1941,22 @@ __webpack_require__.r(__webpack_exports__);
       _this.fetchCategories();
     });
   },
+  watch: {
+    searchText: lodash__WEBPACK_IMPORTED_MODULE_1___default.a.debounce(function () {
+      this.fetchCategories();
+    }, 500)
+  },
   methods: {
     emitCategories: function emitCategories(event) {
       _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('category-' + event);
     },
     fetchCategories: function fetchCategories() {
       var _this2 = this;
-      axios.get('/api/categories').then(function (response) {
+      var url = '/api/categories';
+      if (this.searchText) {
+        url += '?q=' + encodeURIComponent(this.searchText.trim());
+      }
+      axios.get(url).then(function (response) {
         _this2.categories = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -1972,6 +1985,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.formAction === 'Create') {
         axios.post('/api/categories', this.category).then(function (response) {
           $('#categoryModal').modal('hide');
+          _this3.searchText = '';
           _this3.fetchCategories();
           _this3.emitCategories('created');
         })["catch"](function (error) {
@@ -2013,6 +2027,9 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _eventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../eventBus */ "./resources/js/eventBus.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2027,7 +2044,8 @@ __webpack_require__.r(__webpack_exports__);
         updated_at: ''
       },
       formAction: 'Create',
-      formTitle: 'Add Product'
+      formTitle: 'Add Product',
+      searchText: ''
     };
   },
   created: function created() {
@@ -2046,13 +2064,22 @@ __webpack_require__.r(__webpack_exports__);
       _this.fetchProducts();
     });
   },
+  watch: {
+    searchText: lodash__WEBPACK_IMPORTED_MODULE_1___default.a.debounce(function () {
+      this.fetchProducts();
+    }, 500)
+  },
   methods: {
     emitProducts: function emitProducts(event) {
       _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('product-' + event);
     },
     fetchProducts: function fetchProducts() {
       var _this2 = this;
-      axios.get('/api/products').then(function (response) {
+      var url = '/api/products';
+      if (this.searchText) {
+        url += '?q=' + encodeURIComponent(this.searchText.trim());
+      }
+      axios.get(url).then(function (response) {
         _this2.products = response.data;
       })["catch"](function (error) {
         console.log(error);
@@ -2091,6 +2118,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.formAction === 'Create') {
         axios.post('/api/products', this.product).then(function (response) {
           $('#productModal').modal('hide');
+          _this4.searchText = '';
           _this4.fetchProducts();
           _this4.emitProducts('created');
         })["catch"](function (error) {
@@ -2137,9 +2165,9 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", [_c("div", {
-    staticClass: "row mb-4"
+    staticClass: "row"
   }, [_vm._m(0), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6 text-end"
+    staticClass: "col-sm-6 text-end"
   }, [_c("button", {
     staticClass: "btn btn-success",
     attrs: {
@@ -2148,7 +2176,32 @@ var render = function render() {
     on: {
       click: _vm.createCategory
     }
-  }, [_vm._v("Add Category")])])]), _vm._v(" "), _c("table", {
+  }, [_vm._v("Add Category")])])]), _vm._v(" "), _c("div", {
+    staticClass: "row pt-0"
+  }, [_c("div", {
+    staticClass: "col-sm-12"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.searchText,
+      expression: "searchText"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      placeholder: "Search by Name..."
+    },
+    domProps: {
+      value: _vm.searchText
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.searchText = $event.target.value;
+      }
+    }
+  })])]), _vm._v(" "), _c("table", {
     staticClass: "table"
   }, [_vm._m(1), _vm._v(" "), _c("tbody", _vm._l(_vm.categories, function (category) {
     return _c("tr", {
@@ -2270,7 +2323,7 @@ var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "col-md-6"
+    staticClass: "col-sm-6"
   }, [_c("h1", [_vm._v("Categories")])]);
 }, function () {
   var _vm = this,
@@ -2303,9 +2356,9 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", [_c("div", {
-    staticClass: "row mb-4"
+    staticClass: "row"
   }, [_vm._m(0), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6 text-end"
+    staticClass: "col-sm-6 text-end"
   }, [_c("button", {
     staticClass: "btn btn-success",
     attrs: {
@@ -2314,7 +2367,32 @@ var render = function render() {
     on: {
       click: _vm.createProduct
     }
-  }, [_vm._v("Add Product")])])]), _vm._v(" "), _c("table", {
+  }, [_vm._v("Add Product")])])]), _vm._v(" "), _c("div", {
+    staticClass: "row pt-0"
+  }, [_c("div", {
+    staticClass: "col-sm-12"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.searchText,
+      expression: "searchText"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      placeholder: "Search by Name..."
+    },
+    domProps: {
+      value: _vm.searchText
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.searchText = $event.target.value;
+      }
+    }
+  })])]), _vm._v(" "), _c("table", {
     staticClass: "table"
   }, [_vm._m(1), _vm._v(" "), _c("tbody", _vm._l(_vm.products, function (product) {
     return _c("tr", {
@@ -2467,7 +2545,7 @@ var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "col-md-6"
+    staticClass: "col-sm-6"
   }, [_c("h1", [_vm._v("Products")])]);
 }, function () {
   var _vm = this,
