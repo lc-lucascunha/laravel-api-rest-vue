@@ -11,7 +11,7 @@
 
         <div class="row pt-0">
             <div class="col-sm-12">
-                <input type="text" class="form-control" placeholder="Search by Name..." v-model="searchText">
+                <input type="text" class="form-control" placeholder="Search by Name or Category..." v-model="searchText">
             </div>
         </div>
 

@@ -11,9 +11,17 @@ class Product extends Model
         'name'
     ];
 
+    /**
+     * Realiza busca por nome do produto ou
+     * nome da categoria do produto
+     */
     public function scopeSearch($query, $q)
     {
-        return $query->where('name', 'like', "%{$q}%");
+        return $query->where('name', 'like', "%{$q}%")
+                ->orWhereHas('category', function($query) use ($q) {
+                    $query->where('name', 'like', "%{$q}%");
+                });
+
     }
 
     public function category()

@@ -2381,7 +2381,7 @@ var render = function render() {
     staticClass: "form-control",
     attrs: {
       type: "text",
-      placeholder: "Search by Name..."
+      placeholder: "Search by Name or Category..."
     },
     domProps: {
       value: _vm.searchText
