@@ -114,6 +114,10 @@ export default {
             this.fetchCategories();
             this.fetchProducts();
         });
+
+        bus.$on('category-filter', (category) => {
+            this.searchText = category;
+        });
     },
     watch: {
         searchText: _.debounce(function() {

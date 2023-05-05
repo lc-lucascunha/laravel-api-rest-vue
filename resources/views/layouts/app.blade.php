@@ -27,11 +27,21 @@
             width: 1.8rem;
             height: 1.8rem;
         }
+        .count{
+            cursor: pointer;
+        }
+        .count:hover{
+            background: #2e7d32;
+            color: #c8e6c9;
+        }
         .count-null{
             background: #e0e0e0;
         }
         .pt-0{
             padding-top: 0;
+        }
+        .cursor-pointer{
+            cursor: pointer;
         }
         table tbody tr td{
             font-size:  0.7875rem;

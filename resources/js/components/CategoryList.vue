@@ -31,8 +31,13 @@
                 <td>{{ category.id }}</td>
                 <td>{{ category.name }}</td>
                 <td class="text-center">
-                    <label class="count rounded-circle" v-if="category.products_count > 0">{{category.products_count}}</label>
-                    <label class="count-null rounded-circle" v-else>{{category.products_count}}</label>
+                    <label class="count rounded-circle"
+                           title='Search products by this category'
+                           v-if="category.products_count > 0"
+                           @click="emitCategories('filter', category.name)">
+                        {{category.products_count}}
+                    </label>
+                    <label class="count-null rounded-circle" v-else>0</label>
                 </td>
                 <td class="text-center">{{ category.created_at }}</td>
                 <td class="text-center">{{ category.updated_at }}</td>
@@ -110,8 +115,8 @@ export default {
         }, 500)
     },
     methods: {
-        emitCategories(event){
-            bus.$emit('category-'+event);
+        emitCategories(event, data = null){
+            bus.$emit('category-'+event, data);
         },
         fetchCategories() {
             let url = '/api/categories';

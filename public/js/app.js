@@ -1948,7 +1948,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     emitCategories: function emitCategories(event) {
-      _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('category-' + event);
+      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('category-' + event, data);
     },
     fetchCategories: function fetchCategories() {
       var _this2 = this;
@@ -2062,6 +2063,9 @@ __webpack_require__.r(__webpack_exports__);
     _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('category-deleted', function () {
       _this.fetchCategories();
       _this.fetchProducts();
+    });
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('category-filter', function (category) {
+      _this.searchText = category;
     });
   },
   watch: {
@@ -2209,10 +2213,18 @@ var render = function render() {
     }, [_c("td", [_vm._v(_vm._s(category.id))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(category.name))]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
     }, [category.products_count > 0 ? _c("label", {
-      staticClass: "count rounded-circle"
-    }, [_vm._v(_vm._s(category.products_count))]) : _c("label", {
+      staticClass: "count rounded-circle",
+      attrs: {
+        title: "Search products by this category"
+      },
+      on: {
+        click: function click($event) {
+          return _vm.emitCategories("filter", category.name);
+        }
+      }
+    }, [_vm._v("\n                    " + _vm._s(category.products_count) + "\n                ")]) : _c("label", {
       staticClass: "count-null rounded-circle"
-    }, [_vm._v(_vm._s(category.products_count))])]), _vm._v(" "), _c("td", {
+    }, [_vm._v("0")])]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
     }, [_vm._v(_vm._s(category.created_at))]), _vm._v(" "), _c("td", {
       staticClass: "text-center"
