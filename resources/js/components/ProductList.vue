@@ -11,7 +11,10 @@
 
         <div class="row pt-0">
             <div class="col-sm-12">
-                <input type="text" class="form-control" placeholder="Search by Name or Category..." v-model="searchText">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search by Name or Category..." v-model="searchText">
+                    <div class="input-group-text cursor-pointer" title="Clear search" v-if="searchText" @click="searchText = ''">x</div>
+                </div>
             </div>
         </div>
 
@@ -115,7 +118,7 @@ export default {
             this.fetchProducts();
         });
 
-        bus.$on('category-filter', (category) => {
+        bus.$on('category-search', (category) => {
             this.searchText = category;
         });
     },

@@ -2064,7 +2064,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.fetchCategories();
       _this.fetchProducts();
     });
-    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('category-filter', function (category) {
+    _eventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('category-search', function (category) {
       _this.searchText = category;
     });
   },
@@ -2184,6 +2184,8 @@ var render = function render() {
     staticClass: "row pt-0"
   }, [_c("div", {
     staticClass: "col-sm-12"
+  }, [_c("div", {
+    staticClass: "input-group"
   }, [_c("input", {
     directives: [{
       name: "model",
@@ -2205,7 +2207,17 @@ var render = function render() {
         _vm.searchText = $event.target.value;
       }
     }
-  })])]), _vm._v(" "), _c("table", {
+  }), _vm._v(" "), _vm.searchText ? _c("div", {
+    staticClass: "input-group-text cursor-pointer",
+    attrs: {
+      title: "Clear search"
+    },
+    on: {
+      click: function click($event) {
+        _vm.searchText = "";
+      }
+    }
+  }, [_vm._v("x")]) : _vm._e()])])]), _vm._v(" "), _c("table", {
     staticClass: "table"
   }, [_vm._m(1), _vm._v(" "), _c("tbody", _vm._l(_vm.categories, function (category) {
     return _c("tr", {
@@ -2219,7 +2231,7 @@ var render = function render() {
       },
       on: {
         click: function click($event) {
-          return _vm.emitCategories("filter", category.name);
+          return _vm.emitCategories("search", category.name);
         }
       }
     }, [_vm._v("\n                    " + _vm._s(category.products_count) + "\n                ")]) : _c("label", {
@@ -2383,6 +2395,8 @@ var render = function render() {
     staticClass: "row pt-0"
   }, [_c("div", {
     staticClass: "col-sm-12"
+  }, [_c("div", {
+    staticClass: "input-group"
   }, [_c("input", {
     directives: [{
       name: "model",
@@ -2404,7 +2418,17 @@ var render = function render() {
         _vm.searchText = $event.target.value;
       }
     }
-  })])]), _vm._v(" "), _c("table", {
+  }), _vm._v(" "), _vm.searchText ? _c("div", {
+    staticClass: "input-group-text cursor-pointer",
+    attrs: {
+      title: "Clear search"
+    },
+    on: {
+      click: function click($event) {
+        _vm.searchText = "";
+      }
+    }
+  }, [_vm._v("x")]) : _vm._e()])])]), _vm._v(" "), _c("table", {
     staticClass: "table"
   }, [_vm._m(1), _vm._v(" "), _c("tbody", _vm._l(_vm.products, function (product) {
     return _c("tr", {

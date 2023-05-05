@@ -11,7 +11,10 @@
 
         <div class="row pt-0">
             <div class="col-sm-12">
-                <input type="text" class="form-control" placeholder="Search by Name..." v-model="searchText">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search by Name..." v-model="searchText">
+                    <div class="input-group-text cursor-pointer" title="Clear search" v-if="searchText" @click="searchText = ''">x</div>
+                </div>
             </div>
         </div>
 
@@ -34,7 +37,7 @@
                     <label class="count rounded-circle"
                            title='Search products by this category'
                            v-if="category.products_count > 0"
-                           @click="emitCategories('filter', category.name)">
+                           @click="emitCategories('search', category.name)">
                         {{category.products_count}}
                     </label>
                     <label class="count-null rounded-circle" v-else>0</label>
