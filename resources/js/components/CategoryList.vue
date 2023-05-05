@@ -2,18 +2,18 @@
     <div>
         <div class="row">
             <div class="col-sm-6">
-                <h1>Categories</h1>
+                <h1>{{ labels[lang].categories }}</h1>
             </div>
             <div class="col-sm-6 text-end">
-                <button type="button" class="btn btn-success" @click="createCategory">Add Category</button>
+                <button type="button" class="btn btn-success" @click="createCategory">{{ labels[lang].addCategory }}</button>
             </div>
         </div>
 
         <div class="row pt-0">
             <div class="col-sm-12">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search by Name..." v-model="searchText">
-                    <div class="input-group-text cursor-pointer" title="Clear search" v-if="searchText" @click="searchText = ''">x</div>
+                    <input type="text" class="form-control" :placeholder="labels[lang].textSearch" v-model="searchText">
+                    <div class="input-group-text cursor-pointer" :title="labels[lang].clearSearch" v-if="searchText" @click="searchText = ''">x</div>
                 </div>
             </div>
         </div>
@@ -21,11 +21,11 @@
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th class="text-center">Products Count</th>
-                <th class="text-center">Created</th>
-                <th class="text-center">Updated</th>
+                <th>{{ labels[lang].id }}</th>
+                <th>{{ labels[lang].name }}</th>
+                <th class="text-center">{{ labels[lang].productsCount }}</th>
+                <th class="text-center">{{ labels[lang].created }}</th>
+                <th class="text-center">{{ labels[lang].updated }}</th>
                 <th></th>
             </tr>
             </thead>
@@ -35,7 +35,7 @@
                 <td>{{ category.name }}</td>
                 <td class="text-center">
                     <label class="count rounded-circle"
-                           title='Search products by this category'
+                           :title="labels[lang].textSearchProducts"
                            v-if="category.products_count > 0"
                            @click="emitCategories('search', category.name)">
                         {{category.products_count}}
@@ -45,8 +45,8 @@
                 <td class="text-center">{{ category.created_at }}</td>
                 <td class="text-center">{{ category.updated_at }}</td>
                 <td class="text-end">
-                    <button type="button" class="btn btn-primary btn-sm me-2" @click="editCategory(category)">Edit</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click="deleteCategory(category)">Delete</button>
+                    <button type="button" class="btn btn-primary btn-sm me-2" @click="editCategory(category)">{{ labels[lang].edit }}</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click="deleteCategory(category)">{{ labels[lang].delete }}</button>
                 </td>
             </tr>
             </tbody>
@@ -62,13 +62,13 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="name">Name</label>
+                                <label for="name">{{ labels[lang].name }}</label>
                                 <input type="text" class="form-control" id="name" v-model="category.name" required>
                                 <div class="invalid-feedback">Please enter a category name.</div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ labels[lang].cancel }}</button>
                             <button type="submit" class="btn btn-primary">{{ formAction }}</button>
                         </div>
                     </form>
@@ -92,9 +92,58 @@ export default {
                 created_at: '',
                 updated_at: '',
             },
-            formAction: 'Create',
-            formTitle: 'Add Category',
-            searchText: ''
+            formAction: '',
+            formTitle: '',
+            searchText: '',
+            lang: 'en',
+            labels: {
+                en: {
+                    categories: 'Categories',
+                    addCategory: 'Add Category',
+                    editCategory: 'Edit Category',
+
+                    id: 'ID',
+                    name: 'Name',
+                    productsCount: 'Products Count',
+                    created: 'Created',
+                    updated: 'Updated',
+
+                    edit: 'Edit',
+                    delete: 'Delete',
+                    create: 'Create',
+                    update: 'Update',
+                    cancel: 'Cancel',
+
+                    clearSearch: 'Clear search',
+
+                    textSearch: 'Search by Name...',
+                    textConfirDelete: 'Are you sure you want to delete this category?',
+                    textSearchProducts: 'Search products by this category',
+                },
+                pt: {
+                    categories: 'Categorias',
+                    addCategory: 'Adicionar Categoria',
+                    editCategory: 'Editar Categoria',
+
+                    id: 'ID',
+                    name: 'Nome',
+                    productsCount: 'Quantidade de Produtos',
+                    created: 'Criado em',
+                    updated: 'Atualizado em',
+
+                    edit: 'Editar',
+                    delete: 'Excluir',
+                    create: 'Cadastrar',
+                    update: 'Atualizar',
+                    cancel: 'Cancelar',
+
+                    clearSearch: 'Limpar busca',
+
+                    textSearch: 'Buscar por Nome...',
+                    textConfirDelete: 'Tem certeza de que deseja excluir esta categoria?',
+                    textSearchProducts: 'Buscar produtos por esta categoria',
+                },
+            },
         };
     },
     created() {
@@ -111,6 +160,10 @@ export default {
         bus.$on('product-deleted', () => {
             this.fetchCategories();
         });
+
+        bus.$on('languagem-select', (lang) => {
+            this.fetchLang(lang);
+        });
     },
     watch: {
         searchText: _.debounce(function() {
@@ -120,6 +173,9 @@ export default {
     methods: {
         emitCategories(event, data = null){
             bus.$emit('category-'+event, data);
+        },
+        fetchLang(lang) {
+            this.lang = lang;
         },
         fetchCategories() {
             let url = '/api/categories';
@@ -137,8 +193,8 @@ export default {
                 });
         },
         createCategory() {
-            this.formAction = 'Create';
-            this.formTitle = 'Add Category';
+            this.formAction = this.labels[this.lang].create;
+            this.formTitle = this.labels[this.lang].addCategory;
             this.category.id = null;
             this.category.name = '';
             this.category.created_at = '';
@@ -146,8 +202,8 @@ export default {
             $('#categoryModal').modal('show');
         },
         editCategory(category) {
-            this.formAction = 'Update';
-            this.formTitle = 'Edit Category';
+            this.formAction = this.labels[this.lang].update;
+            this.formTitle = this.labels[this.lang].editCategory;
             this.category.id = category.id;
             this.category.name = category.name;
             this.category.created_at = category.created_at;
@@ -155,7 +211,7 @@ export default {
             $('#categoryModal').modal('show');
         },
         submitCategory() {
-            if (this.formAction === 'Create') {
+            if (this.formAction === this.labels[this.lang].create) {
                 axios.post('/api/categories', this.category)
                     .then(response => {
                         $('#categoryModal').modal('hide');
@@ -166,7 +222,7 @@ export default {
                     .catch(error => {
                         console.log(error);
                     });
-            } else if (this.formAction === 'Update') {
+            } else if (this.formAction === this.labels[this.lang].update) {
                 axios.put('/api/categories/' + this.category.id, this.category)
                     .then(response => {
                         $('#categoryModal').modal('hide');
@@ -179,7 +235,7 @@ export default {
             }
         },
         deleteCategory(category) {
-            if (confirm('Are you sure you want to delete this category?')) {
+            if (confirm(this.labels[this.lang].textConfirDelete)) {
                 axios.delete('/api/categories/' + category.id)
                     .then(response => {
                         this.fetchCategories();

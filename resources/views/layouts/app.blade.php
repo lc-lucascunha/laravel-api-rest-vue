@@ -52,7 +52,7 @@
         table{
             margin-bottom: unset !important;
         }
-        button{
+        button, .btn{
             color: white !important;
         }
     </style>

@@ -2,18 +2,18 @@
     <div>
         <div class="row">
             <div class="col-sm-6">
-                <h1>Products</h1>
+                <h1>{{ labels[lang].products }}</h1>
             </div>
             <div class="col-sm-6 text-end">
-                <button type="button" class="btn btn-success" @click="createProduct">Add Product</button>
+                <button type="button" class="btn btn-success" @click="createProduct">{{ labels[lang].addProduct }}</button>
             </div>
         </div>
 
         <div class="row pt-0">
             <div class="col-sm-12">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search by Name or Category..." v-model="searchText">
-                    <div class="input-group-text cursor-pointer" title="Clear search" v-if="searchText" @click="searchText = ''">x</div>
+                    <input type="text" class="form-control" :placeholder="labels[lang].textSearch" v-model="searchText">
+                    <div class="input-group-text cursor-pointer" :title="labels[lang].clearSearch" v-if="searchText" @click="searchText = ''">x</div>
                 </div>
             </div>
         </div>
@@ -21,11 +21,11 @@
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th class="text-center">Created</th>
-                <th class="text-center">Updated</th>
+                <th>{{ labels[lang].id }}</th>
+                <th>{{ labels[lang].name }}</th>
+                <th>{{ labels[lang].category }}</th>
+                <th class="text-center">{{ labels[lang].created }}</th>
+                <th class="text-center">{{ labels[lang].updated }}</th>
                 <th></th>
             </tr>
             </thead>
@@ -37,8 +37,8 @@
                 <td class="text-center">{{ product.created_at }}</td>
                 <td class="text-center">{{ product.updated_at }}</td>
                 <td class="text-end">
-                    <button type="button" class="btn btn-primary btn-sm me-2" @click="editProduct(product)">Edit</button>
-                    <button type="button" class="btn btn-danger btn-sm" @click="deleteProduct(product)">Delete</button>
+                    <button type="button" class="btn btn-primary btn-sm me-2" @click="editProduct(product)">{{ labels[lang].edit }}</button>
+                    <button type="button" class="btn btn-danger btn-sm" @click="deleteProduct(product)">{{ labels[lang].delete }}</button>
                 </td>
             </tr>
             </tbody>
@@ -54,13 +54,13 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="name">Name</label>
+                                <label for="name">{{ labels[lang].name }}</label>
                                 <input type="text" class="form-control" id="name" v-model="product.name" required>
                                 <div class="invalid-feedback">Please enter a product name.</div>
                             </div>
                             <br>
                             <div class="form-group">
-                                <label for="category">Category</label>
+                                <label for="category">{{ labels[lang].category }}</label>
                                 <select class="form-control" id="category" v-model="product.category_id" required>
                                     <option></option>
                                     <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ labels[lang].cancel }}</button>
                             <button type="submit" class="btn btn-primary">{{ formAction }}</button>
                         </div>
                     </form>
@@ -95,9 +95,56 @@ export default {
                 created_at: '',
                 updated_at: '',
             },
-            formAction: 'Create',
-            formTitle: 'Add Product',
-            searchText: ''
+            formAction: '',
+            formTitle: '',
+            searchText: '',
+            lang: 'en',
+            labels: {
+                en: {
+                    products: 'Products',
+                    addProduct: 'Add Product',
+                    editProduct: 'Edit Product',
+
+                    id: 'ID',
+                    name: 'Name',
+                    category: 'Category',
+                    created: 'Created',
+                    updated: 'Updated',
+
+                    edit: 'Edit',
+                    delete: 'Delete',
+                    create: 'Create',
+                    update: 'Update',
+                    cancel: 'Cancel',
+
+                    clearSearch: 'Clear search',
+
+                    textSearch: 'Search by Name or Category...',
+                    textConfirDelete: 'Are you sure you want to delete this product?',
+                },
+                pt: {
+                    products: 'Produtos',
+                    addProduct: 'Adicionar Produto',
+                    editProduct: 'Editar Produto',
+
+                    id: 'ID',
+                    name: 'Nome',
+                    category: 'Categoria',
+                    created: 'Criado em',
+                    updated: 'Atualizado em',
+
+                    edit: 'Editar',
+                    delete: 'Excluir',
+                    create: 'Cadastrar',
+                    update: 'Atualizar',
+                    cancel: 'Cancelar',
+
+                    clearSearch: 'Limpar busca',
+
+                    textSearch: 'Buscar por Nome ou Categoria...',
+                    textConfirDelete: 'Tem certeza de que deseja excluir este produto?',
+                },
+            },
         };
     },
     created() {
@@ -121,6 +168,10 @@ export default {
         bus.$on('category-search', (category) => {
             this.searchText = category;
         });
+
+        bus.$on('languagem-select', (lang) => {
+            this.fetchLang(lang);
+        });
     },
     watch: {
         searchText: _.debounce(function() {
@@ -130,6 +181,9 @@ export default {
     methods: {
         emitProducts(event){
             bus.$emit('product-'+event);
+        },
+        fetchLang(lang) {
+            this.lang = lang;
         },
         fetchProducts() {
             let url = '/api/products';
@@ -156,8 +210,8 @@ export default {
                 });
         },
         createProduct() {
-            this.formAction = 'Create';
-            this.formTitle = 'Add Product';
+            this.formAction = this.labels[this.lang].create;
+            this.formTitle = this.labels[this.lang].addProduct;
             this.product.id = null;
             this.product.name = '';
             this.product.category_id = null;
@@ -166,8 +220,8 @@ export default {
             $('#productModal').modal('show');
         },
         editProduct(product) {
-            this.formAction = 'Update';
-            this.formTitle = 'Edit Product';
+            this.formAction = this.labels[this.lang].update;
+            this.formTitle = this.labels[this.lang].editProduct;
             this.product.id = product.id;
             this.product.name = product.name;
             this.product.category_id = product.category_id;
@@ -200,7 +254,7 @@ export default {
             }
         },
         deleteProduct(product) {
-            if (confirm('Are you sure you want to delete this product?')) {
+            if (confirm(this.labels[this.lang].textConfirDelete)) {
                 axios.delete('/api/products/' + product.id)
                     .then(response => {
                         this.fetchProducts();
