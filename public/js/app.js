@@ -2255,7 +2255,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     submitProduct: function submitProduct() {
       var _this4 = this;
-      if (this.formAction === 'Create') {
+      if (this.formAction === this.labels[this.lang].create) {
         axios.post('/api/products', this.product).then(function (response) {
           $('#productModal').modal('hide');
           _this4.searchText = '';
@@ -2264,7 +2264,7 @@ __webpack_require__.r(__webpack_exports__);
         })["catch"](function (error) {
           console.log(error);
         });
-      } else if (this.formAction === 'Update') {
+      } else if (this.formAction === this.labels[this.lang].update) {
         axios.put('/api/products/' + this.product.id, this.product).then(function (response) {
           $('#productModal').modal('hide');
           _this4.fetchProducts();
