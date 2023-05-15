@@ -62,9 +62,9 @@ Não se esqueça de definir as permissões (caso necessário) nas pasta /bootstr
 ```
 php artisan serve
 ```
-## Demonstração das telas/componentes
+## Demonstração das telas (Componentes)
 
-1. Cadastro do CLIENTE e listagem dos PAGAMENTOS desse cliente: 
+1. CRUD de Categorias e Produtos 
 
 ![Alt text](https://raw.githubusercontent.com/lc-lucascunha/laravel-api-rest-vue/master/public/images/git.png)
 
