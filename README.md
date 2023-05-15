@@ -1,5 +1,3 @@
-![Alt text](https://raw.githubusercontent.com/lc-lucascunha/laravel-api-rest-vue/master/public/images/git.png)
-
 ## Versões utilizadas
 
 - **PHP** (7.2.34)
@@ -64,5 +62,9 @@ Não se esqueça de definir as permissões (caso necessário) nas pasta /bootstr
 ```
 php artisan serve
 ```
+## Demonstração das telas/componentes
 
+1. Cadastro do CLIENTE e listagem dos PAGAMENTOS desse cliente: 
+
+![Alt text](https://raw.githubusercontent.com/lc-lucascunha/laravel-api-rest-vue/master/public/images/git.png)
 
